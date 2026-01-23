@@ -1,3 +1,5 @@
+import * as tf from '@tensorflow/tfjs';
+
 import './style.css';
 import { CANVAS_SIZE } from './constants';
 import { createEmptyGrid, fillPixel } from './pixelGrid';
@@ -15,6 +17,15 @@ canvas.height = CANVAS_SIZE;
 // Store pixel states (0-255 grayscale values)
 let pixels = createEmptyGrid();
 let isDrawing = false;
+
+// Load model once at startup (Graph model format)
+let model: tf.GraphModel | null = null;
+tf.loadGraphModel('./tfjs_model/model.json').then((loadedModel) => {
+  model = loadedModel;
+  console.log('Model loaded successfully');
+}).catch((err) => {
+  console.error('Failed to load model:', err);
+});
 
 // Mouse event handlers
 canvas.addEventListener('mousedown', (e: MouseEvent) => {
@@ -75,9 +86,25 @@ clearBtn.addEventListener('click', () => {
 });
 
 // Predict button 
-predictBtn.addEventListener('click', () => {
-  // TODO: update to send pixel data to the model
-  console.log('Pixel data:', pixels);
+predictBtn.addEventListener('click', async () => {
+  if (!model) {
+    console.error('Model not loaded yet');
+    return;
+  }
+
+  // Normalize pixel values (0-255 -> 0-1) and reshape to [batch, 28, 28]
+  const input = tf.tensor(pixels).div(255).reshape([1, 28, 28]);
+  
+  const prediction = model.predict(input) as tf.Tensor;
+  const predictedDigit = prediction.argMax(1).dataSync()[0];
+  const probabilities = prediction.dataSync();
+  
+  console.log('Predicted digit:', predictedDigit);
+  console.log('Probabilities:', Array.from(probabilities));
+  
+  // Clean up tensors
+  input.dispose();
+  prediction.dispose();
 });
 
 // Initial render
