@@ -54,8 +54,18 @@
             </div>
         </div>
         
-        <div class="canvas-container">
-            <canvas id="pixelCanvas"></canvas>
+        <div class="canvas-section">
+            <div class="canvas-container">
+                <span class="canvas-label">Draw here</span>
+                <canvas id="pixelCanvas"></canvas>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="input-viz-container">
+                <span class="canvas-label">Model input (28×28)</span>
+                <canvas id="inputViz"></canvas>
+            </div>
         </div>
         
         <div class="controls">
@@ -63,7 +73,7 @@
         </div>
         
         <div class="info">
-            Click and drag to draw. Each cell represents a pixel in the MNIST format.
+            Draw a digit on the left. The right shows the normalized 28×28 input fed to the neural network.
         </div>
     </div>
 

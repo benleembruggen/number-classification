@@ -7,11 +7,17 @@ import { render, getPixelCoords } from './canvas';
 // DOM elements
 const canvas = document.getElementById('pixelCanvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
+const inputViz = document.getElementById('inputViz') as HTMLCanvasElement;
+const inputVizCtx = inputViz.getContext('2d')!;
 const clearBtn = document.getElementById('clearBtn') as HTMLButtonElement;
 const buckets = document.querySelectorAll('.bucket');
 
+// Canvas setup
+const INPUT_VIZ_SIZE = 140; // Display size for the 28x28 input
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
+inputViz.width = INPUT_VIZ_SIZE;
+inputViz.height = INPUT_VIZ_SIZE;
 
 // State
 let pixels = createEmptyGrid();
@@ -67,11 +73,33 @@ function resetBuckets(): void {
   });
 }
 
+// Input visualization - shows what the model sees
+function renderInputViz(): void {
+  const pixelSize = INPUT_VIZ_SIZE / 28;
+  
+  for (let row = 0; row < 28; row++) {
+    for (let col = 0; col < 28; col++) {
+      const value = pixels[row][col];
+      const normalized = value / 255;
+    
+      const brightness = Math.round(normalized * 255);
+      inputVizCtx.fillStyle = `rgb(${brightness}, ${brightness}, ${brightness})`;
+      inputVizCtx.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize);
+    }
+  }
+}
+
+function clearInputViz(): void {
+  inputVizCtx.fillStyle = '#000';
+  inputVizCtx.fillRect(0, 0, INPUT_VIZ_SIZE, INPUT_VIZ_SIZE);
+}
+
 // Drawing handlers
 function handleDraw(e: MouseEvent | Touch): void {
   const { row, col } = getPixelCoords(canvas, e as MouseEvent);
   fillPixel(pixels, row, col);
   render(ctx, pixels);
+  renderInputViz();
   schedulePrediction();
 }
 
@@ -105,9 +133,11 @@ canvas.addEventListener('touchend', () => (isDrawing = false));
 clearBtn.addEventListener('click', () => {
   pixels = createEmptyGrid();
   render(ctx, pixels);
+  clearInputViz();
   resetBuckets();
 });
 
 // Initialize
 render(ctx, pixels);
+clearInputViz();
 resetBuckets();
