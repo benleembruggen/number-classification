@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/style.css">
+    <title>MNIST Digit Canvas</title>
+</head>
+<body>
+    <div class="container">
+        <h1>MNIST Digit Canvas</h1>
+        <p class="subtitle">Draw a digit (0-9) using your mouse</p>
+        
+        <div class="canvas-container">
+            <canvas id="pixelCanvas"></canvas>
+        </div>
+        
+        <div class="controls">
+            <button id="clearBtn">Clear</button>
+            <button id="predictBtn">Predict</button>
+        </div>
+        
+        <div class="info">
+            Click and drag to draw. Each cell represents a pixel in the MNIST format.
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
