@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST Digit Canvas</title>
+  <script type="module" crossorigin src="/number-classification/assets/index-idJP4NTY.js"></script>
+  <link rel="stylesheet" crossorigin href="/number-classification/assets/index-CR6dmfeg.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MNIST Digit Canvas</h1>
+        <p class="subtitle">Draw a digit (0-9) using your mouse</p>
+        
+        <div class="probability-container">
+            <div class="bucket" data-digit="0">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">0</span>
+            </div>
+            <div class="bucket" data-digit="1">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">1</span>
+            </div>
+            <div class="bucket" data-digit="2">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">2</span>
+            </div>
+            <div class="bucket" data-digit="3">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">3</span>
+            </div>
+            <div class="bucket" data-digit="4">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">4</span>
+            </div>
+            <div class="bucket" data-digit="5">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">5</span>
+            </div>
+            <div class="bucket" data-digit="6">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">6</span>
+            </div>
+            <div class="bucket" data-digit="7">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">7</span>
+            </div>
+            <div class="bucket" data-digit="8">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">8</span>
+            </div>
+            <div class="bucket" data-digit="9">
+                <div class="bucket-wrapper"><div class="bucket-fill"></div></div>
+                <span class="bucket-label">9</span>
+            </div>
+        </div>
+        
+        <div class="canvas-section">
+            <div class="canvas-container">
+                <span class="canvas-label">Draw here</span>
+                <canvas id="pixelCanvas"></canvas>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="input-viz-container">
+                <span class="canvas-label">Model input (28×28)</span>
+                <canvas id="inputViz"></canvas>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="clearBtn">Clear</button>
+        </div>
+        
+        <div class="info">
+            Draw a digit on the left. The right shows the normalized 28×28 input fed to the neural network.
+        </div>
+    </div>
+
+</body>
+</html>
