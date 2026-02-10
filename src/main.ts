@@ -25,8 +25,8 @@ let isDrawing = false;
 let predictionTimeout: number | null = null;
 let model: tf.GraphModel | null = null;
 
-// Load model
-tf.loadGraphModel('./tfjs_model/model.json')
+const modelUrl = `${import.meta.env.BASE_URL}tfjs_model/model.json`;
+tf.loadGraphModel(modelUrl)
   .then((m) => {
     model = m;
     console.log('Model loaded');
