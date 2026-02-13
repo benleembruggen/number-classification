@@ -3,6 +3,8 @@ import './style.css';
 import { CANVAS_SIZE } from './constants';
 import { createEmptyGrid, fillPixel } from './pixelGrid';
 import { render, getPixelCoords } from './canvas';
+import { preprocessPixels } from './preprocessing';
+import type { PixelGrid } from './types';
 
 // DOM elements
 const canvas = document.getElementById('pixelCanvas') as HTMLCanvasElement;
@@ -37,8 +39,12 @@ tf.loadGraphModel(modelUrl)
 function runPrediction(): void {
   if (!model) return;
 
+  // Preprocess to match MNIST format: crop, resize to 20x20, center by mass, blur
+  const processed = preprocessPixels(pixels);
+  renderInputViz(processed);
+
   // Normalize pixel values (0-255 -> 0-1) and reshape to [batch, 28, 28]
-  const input = tf.tensor(pixels).div(255).reshape([1, 28, 28]);
+  const input = tf.tensor(processed).div(255).reshape([1, 28, 28]);
   const prediction = model.predict(input) as tf.Tensor;
   const probabilities = Array.from(prediction.dataSync());
 
@@ -73,13 +79,14 @@ function resetBuckets(): void {
   });
 }
 
-// Input visualization - shows what the model sees
-function renderInputViz(): void {
+// Input visualization - shows what the model sees (after preprocessing)
+function renderInputViz(displayPixels?: PixelGrid): void {
+  const source = displayPixels || pixels;
   const pixelSize = INPUT_VIZ_SIZE / 28;
   
   for (let row = 0; row < 28; row++) {
     for (let col = 0; col < 28; col++) {
-      const value = pixels[row][col];
+      const value = source[row][col];
       const normalized = value / 255;
     
       const brightness = Math.round(normalized * 255);
@@ -99,7 +106,6 @@ function handleDraw(e: MouseEvent | Touch): void {
   const { row, col } = getPixelCoords(canvas, e as MouseEvent);
   fillPixel(pixels, row, col);
   render(ctx, pixels);
-  renderInputViz();
   schedulePrediction();
 }
 
